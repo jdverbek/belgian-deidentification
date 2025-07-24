@@ -1,0 +1,60 @@
+# Default configuration for Belgian Document Deidentification System
+
+# NLP Configuration
+nlp:
+  model: "robbert-2023-dutch-large"
+  use_gpu: true
+  batch_size: 32
+  max_length: 512
+  confidence_threshold: 0.85
+
+# Deidentification Configuration
+deidentification:
+  mode: "anonymization"  # or "pseudonymization"
+  entities:
+    - "PERSON"
+    - "ADDRESS"
+    - "DATE"
+    - "MEDICAL_ID"
+    - "PHONE"
+    - "EMAIL"
+  preserve_structure: true
+  date_shift_days: null  # Set to number for date shifting
+  replacement_strategy: "realistic"
+
+# Quality Assurance Configuration
+quality_assurance:
+  enable_validation: true
+  confidence_threshold: 0.85
+  expert_review_sampling: 0.1
+  statistical_monitoring: true
+
+# Security Configuration
+security:
+  encryption_enabled: true
+  audit_logging: true
+  access_control: true
+  data_retention_days: 90
+
+# Database Configuration
+database:
+  url: "postgresql://localhost:5432/belgian_deidentification"
+  pool_size: 10
+  max_overflow: 20
+  echo: false
+
+# API Configuration
+api:
+  host: "0.0.0.0"
+  port: 8000
+  workers: 4
+  reload: false
+  log_level: "info"
+
+# General Settings
+debug: false
+log_level: "INFO"
+data_dir: "data"
+models_dir: "data/models"
+temp_dir: "/tmp/belgian_deidentification"
+
