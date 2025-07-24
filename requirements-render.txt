@@ -1,3 +1,4 @@
+# Optimized requirements for Render deployment
 # Core dependencies
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
@@ -11,8 +12,7 @@ sqlalchemy>=2.0.0
 alembic>=1.12.0
 
 # NLP and ML (CPU-optimized for Render)
---index-url https://download.pytorch.org/whl/cpu
-torch>=2.1.0+cpu
+torch>=2.1.0+cpu --index-url https://download.pytorch.org/whl/cpu
 transformers>=4.35.0
 spacy>=3.7.0
 clinlp>=0.6.0
@@ -23,6 +23,7 @@ pandas>=2.0.0
 cryptography>=41.0.0
 python-jose[cryptography]>=3.3.0
 passlib[bcrypt]>=1.7.0
+python-multipart>=0.0.6
 
 # Configuration and environment
 pyyaml>=6.0.0
@@ -39,6 +40,7 @@ prometheus-client>=0.17.0
 # Utilities
 click>=8.1.0
 tqdm>=4.66.0
+pathlib2>=2.3.0
 
 # File processing
 python-docx>=0.8.11

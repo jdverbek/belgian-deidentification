@@ -1,0 +1,67 @@
+services:
+  # Main API Service
+  - type: web
+    name: belgian-deidentification-api
+    env: python
+    plan: starter
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      pip install -e .
+    startCommand: |
+      python -m belgian_deidentification.api.main
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: BELGIAN_DEIDENT_API__HOST
+        value: 0.0.0.0
+      - key: BELGIAN_DEIDENT_API__PORT
+        value: 10000
+      - key: BELGIAN_DEIDENT_DEBUG
+        value: false
+      - key: BELGIAN_DEIDENT_LOG_LEVEL
+        value: INFO
+      - key: BELGIAN_DEIDENT_DATA_DIR
+        value: /opt/render/project/src/data
+      - key: BELGIAN_DEIDENT_MODELS_DIR
+        value: /opt/render/project/src/data/models
+      - key: BELGIAN_DEIDENT_TEMP_DIR
+        value: /tmp/belgian_deidentification
+      - key: BELGIAN_DEIDENT_DATABASE__URL
+        fromDatabase:
+          name: belgian-deidentification-db
+          property: connectionString
+      - key: BELGIAN_DEIDENT_SECURITY__ENCRYPTION_ENABLED
+        value: true
+      - key: BELGIAN_DEIDENT_SECURITY__AUDIT_LOGGING
+        value: true
+      - key: BELGIAN_DEIDENT_QUALITY_ASSURANCE__ENABLE_VALIDATION
+        value: true
+      - key: BELGIAN_DEIDENT_QUALITY_ASSURANCE__CONFIDENCE_THRESHOLD
+        value: 0.85
+      - key: BELGIAN_DEIDENT_NLP__USE_GPU
+        value: false
+      - key: BELGIAN_DEIDENT_NLP__BATCH_SIZE
+        value: 16
+      - key: BELGIAN_DEIDENT_NLP__MAX_LENGTH
+        value: 512
+      - key: BELGIAN_DEIDENT_DEIDENTIFICATION__MODE
+        value: anonymization
+      - key: BELGIAN_DEIDENT_DEIDENTIFICATION__PRESERVE_STRUCTURE
+        value: true
+    healthCheckPath: /health
+    
+  # PostgreSQL Database
+  - type: pserv
+    name: belgian-deidentification-db
+    env: postgresql
+    plan: starter
+    databaseName: belgian_deidentification
+    databaseUser: belgian_deident_user
+    
+  # Redis Cache (optional)
+  - type: redis
+    name: belgian-deidentification-redis
+    plan: starter
+    maxmemoryPolicy: allkeys-lru
+
